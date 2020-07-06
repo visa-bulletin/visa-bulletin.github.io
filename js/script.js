@@ -62,11 +62,14 @@ function addDiff2Row(table, row, colCount) {
         onedate = moment(table["data"][row]["fromData"][i], "DDMMMYY");
         twodate = moment(table["data"][row]["toData"][i], "DDMMMYY");
         days = twodate.diff(onedate, "days");
-        table["data"][row]["diff"].push(days);
+        if (currentDays == days)
+            table["data"][row]["diff"].push("C");
+        else
+            table["data"][row]["diff"].push(days);
     }
 }
 
-function drawTables(fromData, toData) {
+function drawTables(fromData, toData, fromDateStr, toDateStr) {
 
     var tablenames = ["Family-Action", "Family-Final",
         "Employment-Action", "Employment-Final"]
@@ -122,23 +125,40 @@ function drawTables(fromData, toData) {
             rowElm.appendChild(thElm);
         });
 
-        let cars = ["fromData", "diff", "toData"];
-
         table["rows"].forEach(function (rowItem, index) {
             
-            let rowElm = tableElm.insertRow();
+            // let rowElm = tableElm.insertRow();
 
-            let tdElm = document.createElement("td");
-            let text = document.createTextNode(rowItem);
-            tdElm.appendChild(text);
-            tdElm.rowSpan = 4;
-            tdElm.style.textAlign = "center";
-            tdElm.style.verticalAlign = "middle";
-            rowElm.appendChild(tdElm);
+            // let tdElm = document.createElement("th");
+            // let text = document.createTextNode(rowItem);
+            // tdElm.appendChild(text);
+            // tdElm.rowSpan = 4;
+            // tdElm.style.textAlign = "center";
+            // tdElm.style.verticalAlign = "middle";
+            // rowElm.appendChild(tdElm);
 
-            cars.forEach(function (subRowItem, index) {
+            let rowSubHeader = ["fromData", "diff", "toData"];
+
+            rowSubHeader.forEach(function (subRowItem, index) {
 
                 let rowElm = tableElm.insertRow();
+
+                let text = document.createTextNode(rowItem);
+                if (subRowItem == "fromData")
+                    text = document.createTextNode(fromDateStr);
+                if (subRowItem == "toData")
+                    text = document.createTextNode(toDateStr);
+
+                let tdElm = document.createElement("td");
+                if (subRowItem == "diff")
+                    tdElm = document.createElement("th");
+
+                tdElm.appendChild(text);
+                if (subRowItem != "diff")
+                    tdElm.style.color = "lightgray"
+                tdElm.style.textAlign = "center";
+                tdElm.style.verticalAlign = "middle";
+                rowElm.appendChild(tdElm);
 
                 table["data"][rowItem][subRowItem].forEach(function (cellItem, index) {
                     let tdElm = document.createElement("td");
@@ -147,10 +167,14 @@ function drawTables(fromData, toData) {
                     tdElm.style.textAlign = 'center';
                     tdElm.style.verticalAlign = "middle";
                     if (subRowItem === "diff") {
-                        if (cellItem > 0) {
+                        if (cellItem === "C")
                             tdElm.style.color = "#009933";
-                        } else {
-                            tdElm.style.color = "#FF0000";
+                        else {
+                            if (cellItem > 0 ) {
+                                tdElm.style.color = "#009933";
+                            } else {
+                                tdElm.style.color = "#FF0000";
+                            }
                         }
                     }
                     rowElm.appendChild(tdElm);
@@ -164,9 +188,12 @@ function drawTables(fromData, toData) {
 
 var fromData = null;
 var toData = null;
+var fromDateStr = "";
+var toDateStr = "";
+var currentDays = null;
 
 // Set the startDate and endDate according to the data
-var startDate = moment("Jan-2020").startOf('month').format('MMM-YYYY');
+var startDate = moment("Jan-2019").startOf('month').format('MMM-YYYY');
 var endDate = moment("Jul-2020").startOf('month').format('MMM-YYYY');
 
 $("#datepickerfrom").datepicker({
@@ -186,8 +213,9 @@ $("#datepickerfrom").datepicker({
     fromDateStr = moment(e.date).startOf('month').format('MMM-YYYY');
     // console.log('changeDate fromDateStr > ' + fromDateStr);
     fromData = getMonthData("data/" + fromDateStr.toLowerCase() + ".json");
+    currentDays = moment(toDateStr).diff(moment(fromDateStr), "days");
     if (fromData && toData) {
-        drawTables(fromData, toData);
+        drawTables(fromData, toData, fromDateStr, toDateStr);
     }
 });
 
@@ -207,19 +235,21 @@ $("#datepickerto").datepicker({
     toDateStr = moment(e.date).startOf('month').format('MMM-YYYY');
     // console.log('changeDate toDateStr > ' + toDateStr)
     toData = getMonthData("data/" + toDateStr.toLowerCase() + ".json");
+    currentDays = moment(toDateStr).diff(moment(fromDateStr), "days");
     if (fromData && toData) {
-        drawTables(fromData, toData);
+        drawTables(fromData, toData, fromDateStr, toDateStr);
     }
 });
 
 // Update FROM with the month-1 with the latest data
-oneDateStr = moment(endDate).subtract(1, 'months').format('MMM-YYYY');
-$("#datepickerfrom").datepicker("update", oneDateStr);
+fromDateStr = moment(endDate).subtract(1, 'months').format('MMM-YYYY');
+$("#datepickerfrom").datepicker("update", fromDateStr);
 // Update TO with the month with the latest data
+toDateStr = moment(endDate).format('MMM-YYYY');
 $("#datepickerto").datepicker("update", endDate);
 
 // Set the start date of TO to the month with the latest data
-$('#datepickerfrom').datepicker('setEndDate', oneDateStr);
+$('#datepickerfrom').datepicker('setEndDate', fromDateStr);
 // Set the start date of TO to the month with the latest data
 $('#datepickerto').datepicker('setStartDate', moment(endDate).startOf('month').format('MMM-YYYY'));
 // Trigger a changeDate on TO
@@ -228,11 +258,12 @@ $('#datepickerto').datepicker('setStartDate', moment(endDate).startOf('month').f
 // console.log(oneDateStr);
 // console.log(endDate);
 
-fromData = getMonthData("data/" + oneDateStr.toLowerCase() + ".json");
-toData = getMonthData("data/" + endDate.toLowerCase() + ".json");
+fromData = getMonthData("data/" + fromDateStr.toLowerCase() + ".json");
+toData = getMonthData("data/" + toDateStr.toLowerCase() + ".json");
+currentDays = moment(toDateStr).diff(moment(fromDateStr), "days");
 
 // console.log("drawTables");
-drawTables(fromData, toData);
+drawTables(fromData, toData, fromDateStr, toDateStr);
 
 
 

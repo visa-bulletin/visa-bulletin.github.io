@@ -14,6 +14,8 @@
         </script>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width" />
+        <meta name="description" content="Interactive way to find the number of days by which the Final Action and Filing Dates have regressed or moved forward.">
+
         <title>Visa Bulletin - Trends</title>
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous" />
@@ -33,20 +35,25 @@
 
     <body>
         <h1 style="text-align: center;">Visa Bulletin - Trends</h1>
+        <p style="text-align:center;color:gray;">Interactive way to find the number of days by which the Final Action and Filing Dates have regressed or moved forward.</p>
         <br />
         <br />
-        <table class="table" style="margin-left: auto; margin-right: auto; width: 50%;">
+        <p style="text-align:center;">Just select the months you want to compare</p>
+        <table class="table" style="margin-left: auto; margin-right: auto; width: 60%;">
             <tr>
                 <th style="text-align: left;">From</th>
                 <th style="text-align: right;">To</th>
             </tr>
         </table>
-        <div class="container" style="width: 50%;">
+        <div class="container" style="width: 60%;text-align: center;">
             <div class="input-group input-daterange">
                 <input type="text" class="form-control" id="datepickerfrom" />
                 <div class="input-group-addon"></div>
                 <input type="text" class="form-control" id="datepickerto" />
             </div>
+            <span style="color: #FF0000">RED</span> denotes days regressed.
+            <br />
+            <span style="color: #009933">GREEN</span> denotes days moved forward.
         </div>
         <br />
         <br />
