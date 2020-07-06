@@ -41,20 +41,7 @@ function addRow2Data(table, data, tag, row, col, currentdate) {
         if (col in data[row])
             if (data[row][col] != "C")
                 elm = data[row][col];
-    // if (row in data) {
-    //     if (col in data[row]) {
-    //         if (data[row][col] == "C")
-    //             table["data"][row][tag].push(data["meta"]["currentdate"]);
-    //         else
-    //             table["data"][row][tag].push(data[row][col]);
-    //     } else {
-    //         table["data"][row][tag].push(data["meta"]["currentdate"]);
-    //     }
-    // } else {
-    //     table["data"][row][tag].push(data["meta"]["currentdate"]);
-    // }
     table["data"][row][tag].push(elm);
-    // console.log("CELL:" + table["data"][row][tag][0]);
 }
 
 function addDiff2Row(table, row, colCount) {
@@ -93,7 +80,7 @@ function drawTables(fromData, toData, fromDateStr, toDateStr) {
 
         for (var r = 0; r < rows.length; r++) {
             var row = rows[r];
-            // console.log(cols);
+            
             table["data"][row] = {
                 'fromData': [],
                 'toData': [],
@@ -103,14 +90,9 @@ function drawTables(fromData, toData, fromDateStr, toDateStr) {
                 var col = cols[c];
                 addRow2Data(table, prev, 'fromData', row, col, fromData["meta"]["currentDate"]);
                 addRow2Data(table, curr, 'toData', row, col, toData["meta"]["currentDate"]);
-                // console.log(table);
-                // console.log(table["data"]['F1']['fromData']);
             }
             addDiff2Row(table, row, cols.length);
-            // console.log(table["data"][row]["diff"]);
         }
-        // console.log(table);
-        // console.log(JSON.stringify(table, null, 4));
 
         var tableElm = document.getElementById("table" + (index + 1));
         $("#table" + (index + 1)).empty();
@@ -126,16 +108,6 @@ function drawTables(fromData, toData, fromDateStr, toDateStr) {
         });
 
         table["rows"].forEach(function (rowItem, index) {
-            
-            // let rowElm = tableElm.insertRow();
-
-            // let tdElm = document.createElement("th");
-            // let text = document.createTextNode(rowItem);
-            // tdElm.appendChild(text);
-            // tdElm.rowSpan = 4;
-            // tdElm.style.textAlign = "center";
-            // tdElm.style.verticalAlign = "middle";
-            // rowElm.appendChild(tdElm);
 
             let rowSubHeader = ["fromData", "diff", "toData"];
 
@@ -208,6 +180,7 @@ $("#datepickerfrom").datepicker({
     startView: "months",
     minViewMode: "months", // Hides dates
     orientation: "left",
+    autoclose: true,
 }).on("changeDate", function (e) {
     fromDate = moment(e.date).startOf('month');
     // Set the TO start month, a month after the FROM month
@@ -227,6 +200,7 @@ $("#datepickerto").datepicker({
     startView: "months",
     minViewMode: "months", // Hides dates
     orientation: "right",
+    autoclose: true,
 }).on("changeDate", function (e) {
     toDate = moment(e.date).startOf('month');
     // Set the FROM end month, a month before the TO month
@@ -266,7 +240,3 @@ currentDays = moment(toDateStr, 'MMM-YYYY').diff(moment(fromDateStr, 'MMM-YYYY')
 
 // console.log("drawTables");
 drawTables(fromData, toData, fromDateStr, toDateStr);
-
-
-
-
