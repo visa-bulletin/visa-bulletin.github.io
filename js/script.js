@@ -188,32 +188,33 @@ function drawTables(fromData, toData, fromDateStr, toDateStr) {
 
 var fromData = null;
 var toData = null;
+var fromDate = null;
+var toDate = null;
 var fromDateStr = "";
 var toDateStr = "";
 var currentDays = null;
 
-// Set the startDate and endDate according to the data
-var startDate = moment("Jan-2019").startOf('month').format('MMM-YYYY');
-var endDate = moment("Jul-2020").startOf('month').format('MMM-YYYY');
+// Set the startDateStr and endDateStr according to the data
+var startDateStr = "Jan-2019";
+var endDateStr = "Jul-2020";
+// console.log(startDateStr);
+// console.log(endDateStr);
+
 
 $("#datepickerfrom").datepicker({
     format: "M-yyyy",
-    startDate: startDate,
-    endDate: endDate,
+    startDate: startDateStr,
+    endDate: endDateStr,
     startView: "months",
     minViewMode: "months", // Hides dates
     orientation: "left",
 }).on("changeDate", function (e) {
-    // console.log("datepickerfrom changeDate e.date");
-    // console.log(e.date);
+    fromDate = moment(e.date).startOf('month');
     // Set the TO start month, a month after the FROM month
-    $('#datepickerto').datepicker('setStartDate', moment(e.date).add(1, 'months').startOf('month').format('MMM-YYYY'));
-    // console.log('changeDate datepickerto getStartDate');
-    // console.log($('#datepickerto').datepicker('getStartDate'));
-    fromDateStr = moment(e.date).startOf('month').format('MMM-YYYY');
-    // console.log('changeDate fromDateStr > ' + fromDateStr);
+    $('#datepickerto').datepicker('setStartDate', fromDate.add(1, 'months').format('MMM-YYYY'));
+    fromDateStr = moment(fromDate).format('MMM-YYYY');
     fromData = getMonthData("data/" + fromDateStr.toLowerCase() + ".json");
-    currentDays = moment(toDateStr).diff(moment(fromDateStr), "days");
+    currentDays = toDate.diff(fromDate, "days");
     if (fromData && toData) {
         drawTables(fromData, toData, fromDateStr, toDateStr);
     }
@@ -221,46 +222,47 @@ $("#datepickerfrom").datepicker({
 
 $("#datepickerto").datepicker({
     format: "M-yyyy",
-    startDate: startDate,
-    endDate: endDate,
+    startDate: startDateStr,
+    endDate: endDateStr,
     startView: "months",
     minViewMode: "months", // Hides dates
     orientation: "right",
 }).on("changeDate", function (e) {
-    // console.log("datepickerto changeDate e.date");
-    // console.log(e.date);
+    toDate = moment(e.date).startOf('month');
     // Set the FROM end month, a month before the TO month
-    edateStr = moment(e.date).subtract(1, 'months').startOf('month').format('MMM-YYYY');
-    $('#datepickerfrom').datepicker('setEndDate', edateStr);
-    toDateStr = moment(e.date).startOf('month').format('MMM-YYYY');
-    // console.log('changeDate toDateStr > ' + toDateStr)
+    $('#datepickerfrom').datepicker('setEndDate', toDate.subtract(1, 'months').format('MMM-YYYY'));
+    toDateStr = toDate.format('MMM-YYYY');
     toData = getMonthData("data/" + toDateStr.toLowerCase() + ".json");
-    currentDays = moment(toDateStr).diff(moment(fromDateStr), "days");
+    currentDays = toDate.diff(fromDate, "days");
     if (fromData && toData) {
         drawTables(fromData, toData, fromDateStr, toDateStr);
     }
 });
 
+//                           //
+// Set default dates on load //  
+//                           //
+
 // Update FROM with the month-1 with the latest data
-fromDateStr = moment(endDate).subtract(1, 'months').format('MMM-YYYY');
+fromDate = moment(endDateStr, 'MMM-YYYY').subtract(1, 'months')
+fromDateStr = fromDate.format('MMM-YYYY');
 $("#datepickerfrom").datepicker("update", fromDateStr);
 // Update TO with the month with the latest data
-toDateStr = moment(endDate).format('MMM-YYYY');
-$("#datepickerto").datepicker("update", endDate);
+toDate = moment(endDateStr, 'MMM-YYYY');
+toDateStr = endDateStr
+$("#datepickerto").datepicker("update", endDateStr);
 
 // Set the start date of TO to the month with the latest data
 $('#datepickerfrom').datepicker('setEndDate', fromDateStr);
 // Set the start date of TO to the month with the latest data
-$('#datepickerto').datepicker('setStartDate', moment(endDate).startOf('month').format('MMM-YYYY'));
-// Trigger a changeDate on TO
-// $("#datepickerto").datepicker().trigger('changeDate');
+$('#datepickerto').datepicker('setStartDate', endDateStr);
 
-// console.log(oneDateStr);
-// console.log(endDate);
+// console.log(fromDateStr);
+// console.log(toDateStr);
 
 fromData = getMonthData("data/" + fromDateStr.toLowerCase() + ".json");
 toData = getMonthData("data/" + toDateStr.toLowerCase() + ".json");
-currentDays = moment(toDateStr).diff(moment(fromDateStr), "days");
+currentDays = moment(toDateStr, 'MMM-YYYY').diff(moment(fromDateStr, 'MMM-YYYY'), "days");
 
 // console.log("drawTables");
 drawTables(fromData, toData, fromDateStr, toDateStr);
