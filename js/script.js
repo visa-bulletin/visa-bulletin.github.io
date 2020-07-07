@@ -186,7 +186,7 @@ $("#datepickerfrom").datepicker({
     // Set the TO start month, a month after the FROM month
     $('#datepickerto').datepicker('setStartDate', fromDate.add(1, 'months').format('MMM-YYYY'));
     fromDateStr = moment(fromDate).format('MMM-YYYY');
-    fromData = getMonthData("data/" + fromDateStr.toLowerCase() + ".json");
+    fromData = getMonthData("data/" + fromDate.format('YYYY') + "/" + fromDateStr.toLowerCase() + ".json");
     currentDays = toDate.diff(fromDate, "days");
     if (fromData && toData) {
         drawTables(fromData, toData, fromDateStr, toDateStr);
@@ -206,7 +206,7 @@ $("#datepickerto").datepicker({
     // Set the FROM end month, a month before the TO month
     $('#datepickerfrom').datepicker('setEndDate', toDate.subtract(1, 'months').format('MMM-YYYY'));
     toDateStr = toDate.format('MMM-YYYY');
-    toData = getMonthData("data/" + toDateStr.toLowerCase() + ".json");
+    toData = getMonthData("data/" + toDate.format('YYYY') + "/" + toDateStr.toLowerCase() + ".json");
     currentDays = toDate.diff(fromDate, "days");
     if (fromData && toData) {
         drawTables(fromData, toData, fromDateStr, toDateStr);
@@ -234,8 +234,8 @@ $('#datepickerto').datepicker('setStartDate', endDateStr);
 // console.log(fromDateStr);
 // console.log(toDateStr);
 
-fromData = getMonthData("data/" + fromDateStr.toLowerCase() + ".json");
-toData = getMonthData("data/" + toDateStr.toLowerCase() + ".json");
+fromData = getMonthData("data/" + fromDate.format('YYYY') + "/" + fromDateStr.toLowerCase() + ".json");
+toData = getMonthData("data/" + toDate.format('YYYY') + "/" + toDateStr.toLowerCase() + ".json");
 currentDays = moment(toDateStr, 'MMM-YYYY').diff(moment(fromDateStr, 'MMM-YYYY'), "days");
 
 // console.log("drawTables");
