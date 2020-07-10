@@ -49,9 +49,14 @@ function addDiff2Row(table, row, colCount) {
         onedate = moment(table["data"][row]["fromData"][i], "DDMMMYY");
         twodate = moment(table["data"][row]["toData"][i], "DDMMMYY");
         days = twodate.diff(onedate, "days");
-        if (currentDays == days)
-            table["data"][row]["diff"].push("C");
-        else
+        if (currentDays == days) { // currentDays can match any day diff
+            // Making sure that actual dates also match
+            if ((onedate.format("DDMMM-YYYY") == ("01" + fromDateStr)) &&
+                (twodate.format("DDMMM-YYYY") == ("01" + toDateStr))) {
+                    table["data"][row]["diff"].push("C");
+                } else 
+                    table["data"][row]["diff"].push(days);
+        } else
             table["data"][row]["diff"].push(days);
     }
 }
@@ -135,6 +140,9 @@ function drawTables(fromData, toData, fromDateStr, toDateStr) {
                 table["data"][rowItem][subRowItem].forEach(function (cellItem, index) {
                     let tdElm = document.createElement("td");
                     let text = document.createTextNode(cellItem);
+                    // if (subRowItem === "diff")
+                    //     if (isNaN(cellItem))
+                    //         text = document.createTextNode('-');
                     tdElm.appendChild(text);
                     tdElm.style.textAlign = 'center';
                     tdElm.style.verticalAlign = "middle";
@@ -167,7 +175,7 @@ var toDateStr = "";
 var currentDays = null;
 
 // Set the startDateStr and endDateStr according to the data
-var startDateStr = "Jan-2019";
+var startDateStr = "Jan-2017";
 var endDateStr = "Jul-2020";
 // console.log(startDateStr);
 // console.log(endDateStr);
@@ -184,8 +192,8 @@ $("#datepickerfrom").datepicker({
 }).on("changeDate", function (e) {
     fromDate = moment(e.date).startOf('month');
     // Set the TO start month, a month after the FROM month
-    $('#datepickerto').datepicker('setStartDate', fromDate.add(1, 'months').format('MMM-YYYY'));
-    fromDateStr = moment(fromDate).format('MMM-YYYY');
+    $('#datepickerto').datepicker('setStartDate', moment(fromDate).add(1, 'months').format('MMM-YYYY'));
+    fromDateStr = fromDate.format('MMM-YYYY');
     fromData = getMonthData("data/" + fromDate.format('YYYY') + "/" + fromDateStr.toLowerCase() + ".json");
     currentDays = toDate.diff(fromDate, "days");
     if (fromData && toData) {
@@ -204,7 +212,7 @@ $("#datepickerto").datepicker({
 }).on("changeDate", function (e) {
     toDate = moment(e.date).startOf('month');
     // Set the FROM end month, a month before the TO month
-    $('#datepickerfrom').datepicker('setEndDate', toDate.subtract(1, 'months').format('MMM-YYYY'));
+    $('#datepickerfrom').datepicker('setEndDate', moment(toDate).subtract(1, 'months').format('MMM-YYYY'));
     toDateStr = toDate.format('MMM-YYYY');
     toData = getMonthData("data/" + toDate.format('YYYY') + "/" + toDateStr.toLowerCase() + ".json");
     currentDays = toDate.diff(fromDate, "days");
@@ -240,3 +248,7 @@ currentDays = moment(toDateStr, 'MMM-YYYY').diff(moment(fromDateStr, 'MMM-YYYY')
 
 // console.log("drawTables");
 drawTables(fromData, toData, fromDateStr, toDateStr);
+
+
+
+
