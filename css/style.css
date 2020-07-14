@@ -1,3 +1,29 @@
 table tr:nth-of-type(3n+1) td {
     border-bottom: solid lightgray;
 }
+
+.all-buttons {
+    margin: 10px;
+    font-size: 20px;
+}
+
+.txtonroundedborder {
+    margin-top: 20px;
+    border-radius: 20px;
+    border: 2px solid lightgray;
+    padding: 5px;
+}
+
+.txtonroundedborder h1 {
+    text-align: center;
+    margin-top: -20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 20px;
+}
+
+.txtonroundedborder h1 span {
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: white;
+}

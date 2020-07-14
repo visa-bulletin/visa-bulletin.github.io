@@ -109,6 +109,8 @@ function drawTables(fromData, toData, fromDateStr, toDateStr) {
             let thElm = document.createElement("th");
             let text = document.createTextNode(item);
             thElm.appendChild(text);
+            thElm.style.textAlign = "center";
+            thElm.style.verticalAlign = "middle";
             rowElm.appendChild(thElm);
         });
 
@@ -147,13 +149,15 @@ function drawTables(fromData, toData, fromDateStr, toDateStr) {
                     tdElm.style.textAlign = 'center';
                     tdElm.style.verticalAlign = "middle";
                     if (subRowItem === "diff") {
+                        tdElm.style.fontSize = "large";
+                        tdElm.style.fontWeight = "bold";
                         if (cellItem === "C")
-                            tdElm.style.color = "#009933";
+                            tdElm.style.color = "MediumSeaGreen";
                         else {
                             if (cellItem > 0 ) {
-                                tdElm.style.color = "#009933";
+                                tdElm.style.color = "MediumSeaGreen";
                             } else {
-                                tdElm.style.color = "#FF0000";
+                                tdElm.style.color = "Red";
                             }
                         }
                     }
