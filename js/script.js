@@ -32,7 +32,7 @@ function combinedCols(curr, prev) {
     currkey = Object.keys(curr)[0]
     prevkey = Object.keys(prev)[0]
     return uniqueSortedArray(Object.keys(curr[currkey]),
-        Object.keys(curr[prevkey]));
+        Object.keys(prev[prevkey]));
 }
 
 function addRow2Data(table, data, tag, row, col, currentdate) {
@@ -67,6 +67,13 @@ function drawTables(fromData, toData, fromDateStr, toDateStr) {
         "Employment-Action", "Employment-Final"]
 
     tablenames.forEach(function (tablename, index) {
+
+        // Skip if "fromData" or "toData" does not have "tablename"
+        if (!(tablename in fromData) || !(tablename in toData)) {
+            var tableElm = document.getElementById("table" + (index + 1));
+            $("#table" + (index + 1)).empty();
+            return;
+        }
 
         var prev = fromData[tablename];
         var curr = toData[tablename];
@@ -179,7 +186,7 @@ var toDateStr = "";
 var currentDays = null;
 
 // Set the startDateStr and endDateStr according to the data
-var startDateStr = "Oct-2015";
+var startDateStr = "Jan-2015";
 var endDateStr = "Sep-2020";
 // console.log(startDateStr);
 // console.log(endDateStr);
