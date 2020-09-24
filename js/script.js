@@ -187,7 +187,7 @@ var currentDays = null;
 
 // Set the startDateStr and endDateStr according to the data
 var startDateStr = "Jan-2015";
-var endDateStr = "Sep-2020";
+var endDateStr = "Oct-2020";
 // console.log(startDateStr);
 // console.log(endDateStr);
 
