@@ -185,8 +185,10 @@ var fromDateStr = "";
 var toDateStr = "";
 var currentDays = null;
 
-$("#startdate").innerHTML = startDateStr.slice(0,3) + "-" + startDateStr.slice(-4);
-$("#enddate").innerHTML = endDateStr.slice(0,3) + "-" + endDateStr.slice(-4);;
+$("#startdate").innerHTML = startDateStr;
+$("#enddate").innerHTML = endDateStr;
+startDateStr = startDateStr.slice(0,3) + "-" + startDateStr.slice(-4);
+endDateStr = endDateStr.slice(0,3) + "-" + endDateStr.slice(-4);
 
 $("#datepickerfrom").datepicker({
     format: "M-yyyy",
