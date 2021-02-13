@@ -185,12 +185,8 @@ var fromDateStr = "";
 var toDateStr = "";
 var currentDays = null;
 
-// Set the startDateStr and endDateStr according to the data
-var startDateStr = "Jan-2015";
-var endDateStr = "Feb-2021";
-// console.log(startDateStr);
-// console.log(endDateStr);
-
+$("#startdate").innerHTML = startDateStr.slice(0,3) + "-" + startDateStr.slice(-4);
+$("#enddate").innerHTML = endDateStr.slice(0,3) + "-" + endDateStr.slice(-4);;
 
 $("#datepickerfrom").datepicker({
     format: "M-yyyy",
