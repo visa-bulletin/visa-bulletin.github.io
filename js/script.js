@@ -185,8 +185,8 @@ var fromDateStr = "";
 var toDateStr = "";
 var currentDays = null;
 
-$("#startdate").innerHTML = startDateStr;
-$("#enddate").innerHTML = endDateStr;
+document.getElementById("txtstartdate").innerHTML = startDateStr;
+document.getElementById("txtenddate").innerHTML = endDateStr;
 startDateStr = startDateStr.slice(0,3) + "-" + startDateStr.slice(-4);
 endDateStr = endDateStr.slice(0,3) + "-" + endDateStr.slice(-4);
 
